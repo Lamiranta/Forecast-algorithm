@@ -11,9 +11,9 @@ const double a = 0.8;
 
 /// Main variables
 int number_of_data;
-map <int, int> hist;
+map <double, int> hist;
 double meanError = 0.0;
-double memory[10] = {0}, mean = 0, data, forecast, error = 0;
+double memory[10] = {0.0}, mean = 0.0, data, forecast, error = 0.0;
 
 /// Data initialization
 double input()
@@ -35,11 +35,12 @@ double sigmoid()
     return floor(100.0 * sum) / 100.0;
 }
 
+/// Show result for current forecast
 void stage_result()
 {
     cout << "Forecast: " << forecast << endl;
     cout << "Actual data: " << data << endl;
-    cout << "Algorithm error: " << error << endl;
+    cout << "Algorithm error, abs: " << abs(error) << endl;
     system("pause");
 }
 
@@ -60,12 +61,12 @@ void data_analysis()
 
     /// Checking for error forecast
     error = forecast - data;
-    ++hist[int(floor(20 * error))];
-    meanError += error;
+    ++hist[floor(20 * abs(error))];
+    meanError += abs(error);
 
     /// Some info
-    // stage_result();
-    // system("cls");
+    /// stage_result();
+    /// system("cls");
 }
 
 int main()
@@ -84,13 +85,12 @@ int main()
     meanError /= number_of_data;
 
     /// Data analysis log
-    double bond = 0.0;
     cout << "Algorithm log: " << endl;
-    cout << "Mean error: " << meanError << endl;
+    cout << "Mean error, abs: " << meanError << endl;
     for (auto i : hist)
     {
-        cout << bond << " - " << bond + 0.05 << ": "; bond += 0.05;
-        cout << string(i.second * 100 / number_of_data, '*') << endl;
+        cout << i.first / 20 << " - " << i.first / 20 + 0.05 << ": ";
+        cout << (float) i.second * 100 / number_of_data << '%' << endl;
     }
     system("pause");
 
